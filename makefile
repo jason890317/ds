@@ -1,15 +1,26 @@
-exe=string_reverse string_reverse_2
-cc=g++
-config=-Wall -g -o
+.PHONY = all clean
 
-string_reverse_2:string_reverse_2.o
-	$(cc) $(config) $@ $^
+CC = g++			# compiler to use
 
+LINKERFLAG = -lm
 
-string_reverse:string_reverse.o
-	$(cc) $(config) $@ $^
+SRCS := $(wildcard *.cpp)
+BINS := $(SRCS:%.cpp=%)
 
-.PHONY:clean
+all: ${BINS}
+
+%: %.o
+	@echo "Checking.."
+	${CC} ${LINKERFLAG} $< -o $@
+
+%.o: %.cpp
+	@echo "Creating object.."
+	${CC} -c $<
+
 clean:
-	@echo "---clean---"
-	-@rm -rf $(exe) *.o *.out
+	@echo "Cleaning up..."
+	rm -rvf *.o ${BINS}
+
+
+
+
