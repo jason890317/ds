@@ -16,7 +16,7 @@ int get_value(vector<string> a)
         a.pop_back();
         
         //skip "MISS"
-        if(item=="MISS")
+        if(item=="MISS" | item=="")
         {
             continue;
         }
@@ -55,19 +55,34 @@ int get_value(vector<string> a)
     return value;
 }
 
-void miss(vector<string> &a)
+vector<string> miss(vector<string> &a)
 {
     if(!a.empty())
     {
-        for(auto x=a.end()-1;x!=a.begin();x--)
+        int idx=0;
+        for(int i=0;i<a.size();i++)
         {
-            if(*x=="MISS")
+            idx=i;
+            if(i-4>=0)
             {
-                a.erase(x-4,x+1);
+                idx-=4;
             }
+            else
+            {
+                idx=0;
+            }
+            if(a[i]=="MISS")
+            {
+                for(int j=i;j>=idx;j--)
+                {
+                    a[j]="";    
+                }
+            }
+            
         }
+        
     }
-    
+    return a;
 }
 
 int main()
@@ -102,11 +117,22 @@ int main()
         }
     }
     trace.erase(trace.length()-2,trace.length());
-    
+    // for(auto &a:treasure)
+    // {
+    //     cout<<a<<endl;
+    // }
+    // cout<<endl;
     
     value_no_miss=get_value(treasure);
-    miss(treasure);
+    treasure=miss(treasure);
     value_with_miss=get_value(treasure); 
+    
+    // for(auto &a:treasure)
+    // {
+    //     cout<<a<<endl;
+    // }
+
+   
     
     cout<<trace<<endl;
     cout<<value_with_miss<<endl;
