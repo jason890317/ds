@@ -57,13 +57,17 @@ int get_value(vector<string> a)
 
 void miss(vector<string> &a)
 {
-    for(auto x=a.end()-1;x!=a.begin();x--)
+    if(!a.empty())
     {
-        if(*x=="MISS")
+        for(auto x=a.end()-1;x!=a.begin();x--)
         {
-            a.erase(x-4,x+1);
+            if(*x=="MISS")
+            {
+                a.erase(x-4,x+1);
+            }
         }
     }
+    
 }
 
 int main()
