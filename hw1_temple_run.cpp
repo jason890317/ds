@@ -1,9 +1,136 @@
 #include<iostream>
-#include<vector>
+
 #include<string>
 using namespace std;
 
-int get_value(vector<string> a)
+const int MaxSize=101;
+
+
+
+template <class T>
+class stack
+{
+    private:
+        T stack[MaxSize];
+        int top=0;
+       
+    
+    public:
+        bool empty()
+        {
+            if(top<0)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+        T pop()
+        {
+            T item;
+            if(this->empty())
+            {
+                cout<<"stack is empty"<<endl;
+                exit(-1);
+            }
+            item= stack[top];
+            top--;
+            return item;
+        }
+
+        void push(T item)
+        {
+            if(top>=MaxSize-1)
+            {
+                cout<<"stack is full"<<endl;
+                exit(-1);
+            }
+            top++;
+            stack[top]=item;
+        }
+
+        int size()
+        {
+            return top;
+        }
+
+    
+
+        void show()
+        {
+            for(int i=1;i<=this->size();i++)
+            {
+                cout<<stack[i]<<endl;
+            }
+        }
+
+};
+
+template <class T>
+class queue
+{
+    private:
+        T queue[MaxSize];
+        int front=0;
+        int back=0;
+        int size=0;
+        
+    
+    public:
+        int get_size()
+        {
+            return size;
+        }
+        void push_back(T item)
+        {
+            if(this->size >= MaxSize-1)
+            {
+                cout<<"queue is full"<<endl;
+                exit(-1);
+            }
+            back=(back+1)%MaxSize;
+            queue[back]=item;
+            size++;
+        }
+
+        T pop_front()
+        {
+            T item;
+            if(this->empty())
+            {
+                cout<<"queue is empty"<<endl;
+                exit(-1);
+            }
+            front=(front+1)%MaxSize;
+            item = queue[front];
+            size--;
+            return item;
+        }
+
+        bool empty()
+        {
+            if(this->size<=0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        void show()
+        {
+            for(int i=front+1;i<=back;i=(i+1)%MaxSize)
+            {
+                cout<<queue[i]<<endl;
+            }
+        }
+
+};
+
+
+
+int get_value(stack<string> a)
 {
     int count=0;
     int gold_count=0;
@@ -12,8 +139,8 @@ int get_value(vector<string> a)
     while(!a.empty())
     {
         //get item in vector
-        item=a.back();
-        a.pop_back();
+        item=a.pop();
+        
         
         //skip "MISS"
         if(item=="MISS" | item=="")
@@ -55,54 +182,54 @@ int get_value(vector<string> a)
     return value;
 }
 
-vector<string> miss(vector<string> &a)
+int get_miss_value(stack<string> a)
 {
-    if(!a.empty())
+    int count=5;
+    string item;
+    stack<string> b;
+    while(!a.empty())
     {
-        int idx=0;
-        for(int i=0;i<a.size();i++)
+        item=a.pop();
+        if(item=="MISS")
         {
-            idx=i;
-            if(i-4>=0)
-            {
-                idx-=4;
-            }
-            else
-            {
-                idx=0;
-            }
-            if(a[i]=="MISS")
-            {
-                for(int j=i;j>=idx;j--)
-                {
-                    a[j]="";    
-                }
-            }
-            
+            count=0;
         }
-        
+        if(count<5)
+        {
+            item="";
+            count++;
+        }
+        b.push(item);
     }
-    return a;
+    while(!b.empty())
+    {
+        item=b.pop();
+        a.push(item);
+    }
+    return get_value(a);
+    
 }
 
 int main()
 {
-    vector<string> record;
+    stack<string> record;
+    stack<string> treasure; 
     string event,trace;
-    int value_no_miss, value_with_miss;
+    
 
-    vector<string> treasure;
+    
     while(getline(cin,event))
     {
         if (event=="")
         break;
-        record.push_back(event);
+        record.push(event);
     }
+    
     
     while(!record.empty())
     {
-        event=record.back();
-        record.pop_back();
+        event=record.pop();
+        
         if(event=="TL")
         {
             trace+="TR->";
@@ -113,30 +240,14 @@ int main()
         }
         if(event=="GOLD" | event=="SILVER" | event=="MISS")
         {
-            treasure.push_back(event);
+            treasure.push(event);
         }
     }
+    // treasure.show();
     trace.erase(trace.length()-2,trace.length());
-    // for(auto &a:treasure)
-    // {
-    //     cout<<a<<endl;
-    // }
-    // cout<<endl;
-    
-    value_no_miss=get_value(treasure);
-    treasure=miss(treasure);
-    value_with_miss=get_value(treasure); 
-    
-    // for(auto &a:treasure)
-    // {
-    //     cout<<a<<endl;
-    // }
-
-   
-    
     cout<<trace<<endl;
-    cout<<value_with_miss<<endl;
-    cout<<value_no_miss<<endl;
+    cout<<get_miss_value(treasure)<<endl;
+    cout<<get_value(treasure)<<endl;
     
     return 0;
 }
