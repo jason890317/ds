@@ -1,11 +1,9 @@
 #include<iostream>
-
+#include"queue.h"
 #include<string>
 #include"stack.h"
 
 using namespace std;
-
-
 
 int get_value(stack<string> a)
 {
