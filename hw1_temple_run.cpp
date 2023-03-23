@@ -76,12 +76,8 @@ int get_miss_value(stack<string> a)
         }
         b.push(item);
     }
-    while(!b.empty())
-    {
-        item=b.pop();
-        a.push(item);
-    }
-    return get_value(a);
+    b.reverse();
+    return get_value(b);
     
 }
 
