@@ -66,6 +66,22 @@ class stack
             }
         }
 
+        void reverse()
+        {
+            T temp[Max_Size];
+            int i=0;
+            while(!this->empty())
+            {
+                temp[i]=this->pop();
+                i++;
+            }
+            i--;
+            for(int j=0;j<i;j++)
+            {
+                this->push(temp[j]);
+            }
+        }
+
 };
 
 #endif

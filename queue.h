@@ -64,6 +64,23 @@ class queue
             }
         }
 
+        void reverse()
+        {
+            T temp[MaxSize];
+            int i=0;
+            while(!this->empty())
+            {
+                temp[i]=this->pop_front();
+                i++;
+            }
+            i--;
+            while(i>-1)
+            {
+                this->push_back(temp[i]);
+                i--;
+            }
+        }
+
 };
 
 #endif
