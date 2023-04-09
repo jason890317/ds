@@ -5,120 +5,92 @@
 
 using namespace std;
 
-int get_value(stack<string> a)
+int treasure_value(stack<string> tr)
 {
-    int count=0;
-    int gold_count=0;
-    int value=0;
+    int cnt=0;
+    int gold=0;
+    int tr_val=0;
     string item;
-    while(!a.empty())
-    {
-        //get item in vector
-        item=a.pop();
-        
-        
-        //skip "MISS"
-        if(item=="MISS" | item=="")
-        {
+    while(!tr.empty()){
+        item=tr.pop();
+        if(item=="MISS" | item==""){
             continue;
         }
-
-        //record the count
-        count++;
-
-        //count the "GOLD" number in every three itms 
-        if(item=="GOLD")
-        {
-            gold_count++;
+        cnt++;
+        if(item=="GOLD"){
+            gold++;
         }
-
-        //check the value every three items
-        if(count==3)
-        {
-            if(gold_count==3)
-            {
-                value+=500;
+        if(cnt==3){
+            if(gold==3){
+                tr_val+=500;
             }
-            else if (gold_count==2)
-            {
-                value+=300;
+            else if(gold==2){
+                tr_val+=300;
             }
-            else if(gold_count==1)
-            {
-                value+=150;
+            else if(gold==1){
+                tr_val+=150;
             }
             else{
-                value+=50;
+                tr_val+=50;
             }
-            count=0;
-            gold_count=0;
+            cnt=0;
+            gold=0;
         }
     }
-    return value;
+    return tr_val;
 }
 
-int get_miss_value(stack<string> a)
+int count_miss(stack<string> miss_stack)
 {
-    int count=5;
-    string item;
+    int not_count=5;
+    string treasure;
     stack<string> b;
-    while(!a.empty())
-    {
-        item=a.pop();
-        if(item=="MISS")
-        {
-            count=0;
+    while(!miss_stack.empty()){
+        treasure=miss_stack.pop();
+        if(treasure=="MISS"){
+            not_count=0;
         }
-        if(count<5)
-        {
-            item="";
-            count++;
+        if(not_count<5){
+            treasure="";
+            not_count++;
         }
-        b.push(item);
+        b.push(treasure);
     }
     b.reverse();
-    return get_value(b);
-    
+    return treasure_value(b);
 }
 
 int main()
 {
-    stack<string> record;
-    stack<string> treasure; 
-    string event,trace;
-    
-
-    
-    while(getline(cin,event))
+    stack<string> data;
+    stack<string> tr_item; 
+    string item,path;
+    while(getline(cin,item))
     {
-        if (event=="")
+        if (item=="")
         break;
-        record.push(event);
+        data.push(item);
     }
-    
-    
-    while(!record.empty())
+    while(!data.empty())
     {
-        event=record.pop();
+        item=data.pop();
         
-        if(event=="TL")
+        if(item=="TL")
         {
-            trace+="TR->";
+            path+="TR->";
         }
-        if(event=="TR")
+        if(item=="TR")
         {
-            trace+="TL->";
+            path+="TL->";
         }
-        if(event=="GOLD" | event=="SILVER" | event=="MISS")
+        if(item=="GOLD" | item=="SILVER" | item=="MISS")
         {
-            treasure.push(event);
+            tr_item.push(item);
         }
     }
-    // treasure.show();
-    trace.erase(trace.length()-2,trace.length());
-    cout<<trace<<endl;
-    cout<<get_miss_value(treasure)<<endl;
-    cout<<get_value(treasure)<<endl;
-    
+    path.erase(path.length()-2,path.length());
+    cout<<path<<endl;
+    cout<<count_miss(tr_item)<<endl;
+    cout<<treasure_value(tr_item)<<endl;
     return 0;
 }
