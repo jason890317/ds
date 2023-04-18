@@ -1,15 +1,16 @@
 #ifndef TREE_H
 #define TREE_H
-#include <iostream>
+#include<iostream>
+#include<string>
 using namespace std;
 template <class T>
 class node
 {
-    protected:
+    
+    public:
         T item;
         node<T> *right;
         node<T> *left;
-    public:
         node<T>():item(0),right(NULL),left(NULL){};
         node<T>(T it, node<T> *r, node<T> *l):item(it),right(r),left(l){};
         T val()  
@@ -48,6 +49,23 @@ class tree : public node<T>
         {
             return root;
         }
+        string preorder(node<T> *cur)
+        {
+            static string result="";
+            if(cur!=NULL)
+            {
+                if(cur->val()!=0)
+                {
+                    result+=to_string((int)cur->val());
+                    result+=" ";
+                }
+                
+                preorder(cur->left);
+                preorder(cur->right);
+            }
+            return result;
+        }
+        
 };
 
 
